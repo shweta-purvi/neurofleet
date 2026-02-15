@@ -1,0 +1,110 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { Shield, Mail, Lock, User as UserIcon } from 'lucide-react';
+
+const Login = () => {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        role: 'CUSTOMER'
+    });
+    const [loading, setLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await login(formData.email, formData.password);
+            navigate(`/${formData.role.toLowerCase()}/dashboard`);
+        } catch (err) {
+            console.error(err);
+            alert('Authentication failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-container">
+            <div className="glass-card">
+                <div className="logo-text">NeuroFleetX</div>
+                <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginBottom: '32px' }}>
+                    Urban Mobility AI Interface
+                </p>
+
+                <form onSubmit={handleSubmit}>
+                    <div className="input-group">
+                        <label className="input-label">Email Address</label>
+                        <div style={{ position: 'relative' }}>
+                            <Mail size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <input
+                                type="email"
+                                name="email"
+                                className="input-field"
+                                placeholder="name@example.com"
+                                style={{ paddingLeft: '48px' }}
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="input-group">
+                        <label className="input-label">Password</label>
+                        <div style={{ position: 'relative' }}>
+                            <Lock size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <input
+                                type="password"
+                                name="password"
+                                className="input-field"
+                                placeholder="••••••••"
+                                style={{ paddingLeft: '48px' }}
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    <div className="input-group">
+                        <label className="input-label">System Role</label>
+                        <div style={{ position: 'relative' }}>
+                            <Shield size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <select
+                                name="role"
+                                className="input-field"
+                                style={{ paddingLeft: '48px', appearance: 'none' }}
+                                value={formData.role}
+                                onChange={handleChange}
+                            >
+                                <option value="ADMIN">Administrator</option>
+                                <option value="FLEET_MANAGER">Fleet Manager</option>
+                                <option value="DRIVER">Service Driver</option>
+                                <option value="CUSTOMER">Commuter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                        {loading ? 'AUTHENTICATING...' : 'ACCESS SYSTEM'}
+                    </button>
+                </form>
+
+                <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '0.9rem' }}>
+                    <span style={{ color: 'var(--text-muted)' }}>New to the fleet? </span>
+                    <Link to="/register" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Create Account</Link>
+                </div>
+            </div>
+        </div >
+    );
+};
+
+export default Login;
