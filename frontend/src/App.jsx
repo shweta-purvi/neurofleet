@@ -12,6 +12,13 @@ import BookingInterface from './pages/BookingInterface';
 import AdminAnalytics from './pages/AdminAnalytics';
 import Dashboard from './pages/Dashboard';
 import Sidebar from './components/Sidebar';
+import RealTimeTracking from './pages/RealTimeTracking';
+import UsersManagement from './pages/UsersManagement';
+import Schedules from './pages/Schedules';
+import UserProfile from './pages/UserProfile';
+import Settings from './pages/Settings';
+import Notifications from './pages/Notifications';
+import Support from './pages/Support';
 
 
 
@@ -37,14 +44,26 @@ function App() {
 
           <Route path="/admin/dashboard" element={<ProtectedRoute><Dashboard title="Admin Intel Command" /></ProtectedRoute>} />
           <Route path="/admin/analytics" element={<ProtectedRoute><AdminAnalytics /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute><UsersManagement /></ProtectedRoute>} />
+          <Route path="/admin/tracking" element={<ProtectedRoute><RealTimeTracking /></ProtectedRoute>} />
+
           <Route path="/fleet_manager/dashboard" element={<ProtectedRoute><Dashboard title="Operations Control" /></ProtectedRoute>} />
           <Route path="/manager/fleet" element={<ProtectedRoute><FleetInventory /></ProtectedRoute>} />
           <Route path="/manager/maintenance" element={<ProtectedRoute><MaintenanceAnalytics /></ProtectedRoute>} />
+          <Route path="/manager/tracking" element={<ProtectedRoute><RealTimeTracking /></ProtectedRoute>} />
+
           <Route path="/driver/dashboard" element={<ProtectedRoute><Dashboard title="Driver Hub" /></ProtectedRoute>} />
           <Route path="/driver/routes" element={<ProtectedRoute><RouteOptimizer /></ProtectedRoute>} />
+          <Route path="/driver/schedules" element={<ProtectedRoute><Schedules /></ProtectedRoute>} />
+
           <Route path="/customer/dashboard" element={<ProtectedRoute><Dashboard title="NeuroFleet Interface" /></ProtectedRoute>} />
           <Route path="/customer/booking" element={<ProtectedRoute><BookingInterface /></ProtectedRoute>} />
           <Route path="/customer/trips" element={<ProtectedRoute><MyTrips /></ProtectedRoute>} />
+
+          <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+          <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

@@ -9,7 +9,12 @@ import {
     Settings,
     LogOut,
     TrendingUp,
-    Users
+    Users,
+    Navigation,
+    Bell,
+    User as UserIcon,
+    Shield,
+    HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -19,14 +24,17 @@ const Sidebar = () => {
     const getMenuItems = () => {
         const common = [
             { name: 'Dashboard', path: `/${user.role.toLowerCase()}/dashboard`, icon: <LayoutDashboard size={20} /> },
+            { name: 'Signals', path: '/notifications', icon: <Bell size={20} /> },
         ];
 
         const admin = [
             { name: 'Fleet Analytics', path: '/admin/analytics', icon: <TrendingUp size={20} /> },
+            { name: 'Live Tracking', path: '/admin/tracking', icon: <Navigation size={20} /> },
             { name: 'System Users', path: '/admin/users', icon: <Users size={20} /> },
         ];
 
         const manager = [
+            { name: 'Live Tracking', path: '/manager/tracking', icon: <Navigation size={20} /> },
             { name: 'Fleet Inventory', path: '/manager/fleet', icon: <Car size={20} /> },
             { name: 'Maintenance', path: '/manager/maintenance', icon: <Activity size={20} /> },
         ];
@@ -41,14 +49,25 @@ const Sidebar = () => {
             { name: 'My Trips', path: '/customer/trips', icon: <MapIcon size={20} /> },
         ]
 
+        const footer = [
+            { name: 'My Identity', path: '/profile', icon: <UserIcon size={20} /> },
+            { name: 'Settings', path: '/settings', icon: <Settings size={20} /> },
+            { name: 'Help Hub', path: '/support', icon: <HelpCircle size={20} /> },
+        ];
+
+        let roleItems = [];
         switch (user.role) {
-            case 'ADMIN': return [...common, ...admin];
-            case 'FLEET_MANAGER': return [...common, ...manager];
-            case 'DRIVER': return [...common, ...driver];
-            case 'CUSTOMER': return [...common, ...customer];
-            default: return common;
+            case 'ADMIN': roleItems = admin; break;
+            case 'FLEET_MANAGER': roleItems = manager; break;
+            case 'DRIVER': roleItems = driver; break;
+            case 'CUSTOMER': roleItems = customer; break;
+            default: break;
         }
+
+        return { main: [...common, ...roleItems], footer };
     };
+
+    const menu = getMenuItems();
 
     return (
         <aside className="nav-sidebar">
@@ -57,7 +76,23 @@ const Sidebar = () => {
             <div style={{ marginBottom: '32px' }}>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Main Menu</p>
                 <nav>
-                    {getMenuItems().map((item) => (
+                    {menu.main.map((item) => (
+                        <NavLink
+                            key={item.name}
+                            to={item.path}
+                            className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+                        >
+                            {item.icon}
+                            <span style={{ marginLeft: '12px' }}>{item.name}</span>
+                        </NavLink>
+                    ))}
+                </nav>
+            </div>
+
+            <div style={{ marginBottom: '32px' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Configuration</p>
+                <nav>
+                    {menu.footer.map((item) => (
                         <NavLink
                             key={item.name}
                             to={item.path}
