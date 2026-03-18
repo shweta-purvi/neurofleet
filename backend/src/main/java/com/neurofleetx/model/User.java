@@ -35,6 +35,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String status = "Active"; // Active, Inactive, Pending
+    private String phone;
+    private String location;
+    private Boolean driverApproved = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

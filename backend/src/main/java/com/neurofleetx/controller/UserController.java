@@ -28,4 +28,15 @@ public class UserController {
     public ResponseEntity<User> updateProfile(@RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
+
+    @PutMapping("/{id}/approve")
+    public ResponseEntity<User> approveDriver(@PathVariable Long id, @RequestParam boolean approved) {
+        return ResponseEntity.ok(userService.approveDriver(id, approved));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }

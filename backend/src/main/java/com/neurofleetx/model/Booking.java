@@ -30,6 +30,11 @@ public class Booking {
     private LocalDateTime bookingTime;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    private Double pickupLat;
+    private Double pickupLng;
+    private Double dropLat;
+    private Double dropLng;
     
     @Enumerated(EnumType.STRING)
     private BookingStatus status;

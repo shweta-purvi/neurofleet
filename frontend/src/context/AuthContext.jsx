@@ -55,8 +55,14 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('neuro_token');
     };
 
+    const updateUserContext = (newData) => {
+        const updatedUser = { ...user, ...newData };
+        setUser(updatedUser);
+        localStorage.setItem('neuro_user', JSON.stringify(updatedUser));
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout }}>
+        <AuthContext.Provider value={{ user, setUser, updateUserContext, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

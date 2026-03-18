@@ -66,28 +66,51 @@ const VehicleCard = ({ vehicle }) => {
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {vehicle.type === 'EV' ? <Battery size={18} color="var(--success)" /> : <Fuel size={18} color="var(--warning)" />}
+                        {vehicle.type === 'EV BUS' ? <Battery size={16} color="var(--success)" /> : <Fuel size={16} color="var(--warning)" />}
                         <div>
-                            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{vehicle.type === 'EV' ? 'Battery' : 'Fuel'}</p>
-                            <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>{vehicle.level}%</p>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>{vehicle.type === 'EV BUS' ? 'Battery' : 'Fuel'}</p>
+                            <p style={{ fontSize: '0.8rem', fontWeight: 600 }}>{vehicle.batteryPercentage ? vehicle.batteryPercentage : vehicle.fuelLevel}%</p>
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Gauge size={18} color="var(--primary)" />
+                        <Gauge size={16} color="var(--primary)" />
                         <div>
-                            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>Speed</p>
-                            <p style={{ fontSize: '0.9rem', fontWeight: 600 }}>{vehicle.speed} km/h</p>
+                            <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Speed</p>
+                            <p style={{ fontSize: '0.8rem', fontWeight: 600 }}>{vehicle.speed} km/h</p>
                         </div>
+                    </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px', padding: '12px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div>
+                        <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Load Weight</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 700 }}>{vehicle.loadWeight || 0} kg</p>
+                    </div>
+                    <div>
+                        <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Tire Pressure</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 700 }}>{vehicle.tirePressure || 0} PSI</p>
+                    </div>
+                    <div style={{ marginTop: '8px' }}>
+                        <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Weather</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)' }}>{vehicle.currentWeather || 'Clear'}</p>
+                    </div>
+                    <div style={{ marginTop: '8px' }}>
+                        <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Traffic</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 700, color: (vehicle.trafficDensity > 50 ? 'var(--danger)' : 'var(--success)') }}>{vehicle.trafficDensity || 0}%</p>
+                    </div>
+                    <div style={{ marginTop: '8px' }}>
+                        <p style={{ fontSize: '0.55rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>Road Type</p>
+                        <p style={{ fontSize: '0.75rem', fontWeight: 700 }}>{vehicle.roadType || 'City'}</p>
                     </div>
                 </div>
 
                 <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
                     <div style={{
                         height: '100%',
-                        width: `${vehicle.level}%`,
-                        background: vehicle.level < 20 ? 'var(--danger)' : vehicle.level < 50 ? 'var(--warning)' : 'var(--success)',
+                        width: `${vehicle.batteryPercentage ? vehicle.batteryPercentage : vehicle.fuelLevel}%`,
+                        background: (vehicle.batteryPercentage ? vehicle.batteryPercentage : vehicle.fuelLevel) < 20 ? 'var(--danger)' : (vehicle.batteryPercentage ? vehicle.batteryPercentage : vehicle.fuelLevel) < 50 ? 'var(--warning)' : 'var(--success)',
                         boxShadow: '0 0 10px rgba(0,0,0,0.5)'
                     }}></div>
                 </div>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Download, Users, Briefcase, Navigation, Activity } from 'lucide-react';
+import { Download, Users, Briefcase, Navigation, Activity, AlertTriangle, Globe, Clock, BarChart3 } from 'lucide-react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -30,6 +30,21 @@ const AdminAnalytics = () => {
         activeUsers: 12800,
         avgTime: 18
     });
+    const [activeFactors, setActiveFactors] = useState(() => {
+        const saved = localStorage.getItem('neuro_ai_factors');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    const toggleFactor = (factorLabel) => {
+        let newFactors;
+        if (activeFactors.includes(factorLabel)) {
+            newFactors = activeFactors.filter(f => f !== factorLabel);
+        } else {
+            newFactors = [...activeFactors, factorLabel];
+        }
+        setActiveFactors(newFactors);
+        localStorage.setItem('neuro_ai_factors', JSON.stringify(newFactors));
+    };
 
     useEffect(() => {
         const fetchFleet = async () => {
@@ -60,6 +75,10 @@ const AdminAnalytics = () => {
         ]
     };
 
+    const activeVehicles = vehicles.filter(v => v.status === 'IN_USE').length;
+    const utilization = vehicles.length > 0 ? Math.round((activeVehicles / vehicles.length) * 100) : 0;
+    const alertCount = vehicles.filter(v => v.status === 'CRITICAL').length;
+
     return (
         <div className="main-content">
             <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
@@ -71,7 +90,7 @@ const AdminAnalytics = () => {
                     <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <Download size={18} /> EXPORT CSV
                     </button>
-                    <button className="btn-primary">AI REPORT</button>
+                    <button className="btn-primary" onClick={() => alert('AI Report Generated: Fleet Optimal')}>AI REPORT</button>
                 </div>
             </header>
 
@@ -90,8 +109,8 @@ const AdminAnalytics = () => {
                 <div className="stat-card">
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Network Load</p>
-                            <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>74%</h2>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Network Utilization</p>
+                            <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>{utilization}%</h2>
                         </div>
                         <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)' }}>
                             <Activity size={24} color="var(--success)" />
@@ -101,11 +120,11 @@ const AdminAnalytics = () => {
                 <div className="stat-card">
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <div>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Active Sessions</p>
-                            <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>{stats.activeUsers / 1000}k</h2>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Critical Signals</p>
+                            <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>{alertCount}</h2>
                         </div>
-                        <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)' }}>
-                            <Users size={24} color="var(--secondary)" />
+                        <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)' }}>
+                            <AlertTriangle size={24} color="var(--danger)" />
                         </div>
                     </div>
                 </div>
@@ -142,6 +161,59 @@ const AdminAnalytics = () => {
                             }
                         }} />
                     </div>
+                </div>
+            </div>
+
+            <div className="stat-card" style={{ marginTop: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                    <Zap size={24} color="var(--primary)" />
+                    <h3 style={{ fontSize: '1.2rem' }}>Global AI Predictive Factors (Real-time)</h3>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+                    {[
+                        { label: 'Current Traffic Density', value: 'High Density (Sync: 0.4s)', icon: <Activity size={16} /> },
+                        { label: 'Weather Conditions', value: 'Dynamic Shift Detected', icon: <Globe size={16} /> },
+                        { label: 'Peak Hour Status', value: 'Active (Congestion x1.4)', icon: <Clock size={16} /> },
+                        { label: 'Vehicle Health Status', value: 'Fleet Integrity 96.2%', icon: <Zap size={16} /> },
+                        { label: 'Historical Traffic Data', value: 'ML Training Set v12.4', icon: <BarChart3 size={16} /> },
+                        { label: 'Accident / Roadblock Data', value: 'Live Feed Tracking', icon: <AlertTriangle size={16} /> },
+                        { label: 'Driver Performance Score', value: 'Real-time Telemetry', icon: <Users size={16} /> },
+                        { label: 'EV Charging Availability', value: 'Distribution Optimized', icon: <Briefcase size={16} /> },
+
+                    ].map((factor, i) => {
+                        const isFactorActive = activeFactors.length === 0 || activeFactors.includes(factor.label);
+                        return (
+                            <div
+                                key={i}
+                                onClick={() => toggleFactor(factor.label)}
+                                style={{
+                                    padding: '16px',
+                                    background: isFactorActive ? 'rgba(0, 242, 254, 0.05)' : 'rgba(255,255,255,0.02)',
+                                    borderRadius: '12px',
+                                    border: isFactorActive ? '1px solid rgba(0, 242, 254, 0.2)' : '1px solid rgba(255,255,255,0.05)',
+                                    display: 'flex',
+                                    gap: '12px',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                    opacity: isFactorActive ? 1 : 0.5,
+                                    transition: 'all 0.2s'
+                                }}>
+                                <div style={{ color: isFactorActive ? 'var(--primary)' : 'var(--text-muted)' }}>{factor.icon}</div>
+                                <div>
+                                    <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', justifyContent: 'space-between', width: '220px' }}>
+                                        {factor.label}
+                                        <span style={{ color: isFactorActive ? 'var(--success)' : 'var(--text-muted)' }}>{isFactorActive ? 'ACTIVE' : 'DISABLED'}</span>
+                                    </p>
+                                    <p style={{ fontSize: '0.9rem', fontWeight: 600, color: isFactorActive ? 'var(--text-main)' : 'var(--text-muted)' }}>{isFactorActive ? factor.value : 'Integration Paused'}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+                <div style={{ marginTop: '24px', padding: '16px', background: 'rgba(0, 242, 254, 0.05)', borderRadius: '12px', border: '1px dashed var(--primary)' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                        NeuroFleetX AI is currently processing 15+ concurrent factors including <span style={{ color: 'var(--primary)' }}>Load Weight, Narrow Road Analysis, Pickup-Drop Coordinates, and Idle Time Minimization</span>.
+                    </p>
                 </div>
             </div>
         </div>

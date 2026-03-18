@@ -24,7 +24,18 @@ public class UserService {
     public User updateUser(User userDetails) {
         User user = getCurrentUser();
         user.setFullName(userDetails.getFullName());
-        // Email and Role updates usually restricted or handled differently
+        user.setPhone(userDetails.getPhone());
+        user.setLocation(userDetails.getLocation());
         return userRepository.save(user);
+    }
+
+    public User approveDriver(Long userId, boolean approved) {
+        User user = userRepository.findById(userId).orElseThrow();
+        user.setDriverApproved(approved);
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

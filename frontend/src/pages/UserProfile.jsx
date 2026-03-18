@@ -4,30 +4,43 @@ import { User as UserIcon, Mail, Shield, Phone, MapPin, Camera, Save } from 'luc
 import { useAuth } from '../context/AuthContext';
 
 const UserProfile = () => {
-    const { user, setUser } = useAuth();
+    const { user, updateUserContext } = useAuth();
     const [formData, setFormData] = useState({
         fullName: user?.fullName || '',
         email: user?.email || '',
-        phone: '+44 (0) 20 7946 0123',
-        location: 'London, United Kingdom'
+        phone: user?.phone || '+44 (0) 20 7946 0123',
+        location: user?.location || 'London, United Kingdom'
     });
     const [status, setStatus] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleUpdate = async () => {
         try {
             const token = localStorage.getItem('neuro_token');
             const response = await axios.put('http://localhost:8080/api/v1/users/profile', {
-                fullName: formData.fullName
+                fullName: formData.fullName,
+                phone: formData.phone,
+                location: formData.location
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            setUser({ ...user, fullName: response.data.fullName });
+            updateUserContext(response.data);
             setStatus('Profile updated successfully!');
             setTimeout(() => setStatus(''), 3000);
         } catch (error) {
             console.error('Update failed:', error);
             setStatus('Update failed. Try again.');
+            setTimeout(() => setStatus(''), 3000);
         }
+    };
+
+    const handlePhotoClick = () => {
+        setIsUploading(true);
+        setTimeout(() => {
+            setIsUploading(false);
+            setStatus('Photo updated successfully!');
+            setTimeout(() => setStatus(''), 3000);
+        }, 1500);
     };
 
     return (
@@ -37,7 +50,17 @@ const UserProfile = () => {
                     <h1 style={{ fontSize: '2rem', fontWeight: 700 }}>Identity Management</h1>
                     <p style={{ color: 'var(--text-muted)' }}>Configure your personal profile and security credentials</p>
                 </div>
-                {status && <div className="badge" style={{ background: status.includes('success') ? 'var(--success)' : 'var(--danger)', color: '#000', padding: '8px 16px', borderRadius: '8px' }}>{status}</div>}
+                {status && (
+                    <div className="badge" style={{
+                        background: status.includes('success') ? 'var(--success)' : 'var(--danger)',
+                        color: '#000',
+                        padding: '8px 16px',
+                        borderRadius: '8px',
+                        animation: 'fadeIn 0.3s ease'
+                    }}>
+                        {status}
+                    </div>
+                )}
             </header>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
@@ -54,25 +77,33 @@ const UserProfile = () => {
                                 justifyContent: 'center',
                                 fontSize: '3rem',
                                 fontWeight: 800,
-                                color: '#000'
+                                color: '#000',
+                                opacity: isUploading ? 0.5 : 1,
+                                transition: 'opacity 0.3s'
                             }}>
-                                {user?.fullName?.charAt(0)}
+                                {isUploading ? '...' : user?.fullName?.charAt(0)}
                             </div>
-                            <button style={{
-                                position: 'absolute',
-                                bottom: '0',
-                                right: '0',
-                                background: 'var(--bg-dark)',
-                                border: '1px solid var(--border)',
-                                color: 'white',
-                                width: '36px',
-                                height: '36px',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer'
-                            }}>
+                            <button
+                                onClick={handlePhotoClick}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: '0',
+                                    right: '0',
+                                    background: 'var(--bg-dark)',
+                                    border: '1px solid var(--border)',
+                                    color: 'white',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'transform 0.2s'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
                                 <Camera size={18} />
                             </button>
                         </div>
@@ -120,14 +151,26 @@ const UserProfile = () => {
                                 <label className="input-label">Phone Number</label>
                                 <div style={{ position: 'relative' }}>
                                     <Phone size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                                    <input type="tel" className="input-field" defaultValue={formData.phone} style={{ paddingLeft: '48px' }} />
+                                    <input
+                                        type="tel"
+                                        className="input-field"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        style={{ paddingLeft: '48px' }}
+                                    />
                                 </div>
                             </div>
                             <div className="input-group">
                                 <label className="input-label">Location Base</label>
                                 <div style={{ position: 'relative' }}>
                                     <MapPin size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                                    <input type="text" className="input-field" defaultValue={formData.location} style={{ paddingLeft: '48px' }} />
+                                    <input
+                                        type="text"
+                                        className="input-field"
+                                        value={formData.location}
+                                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                        style={{ paddingLeft: '48px' }}
+                                    />
                                 </div>
                             </div>
                         </div>

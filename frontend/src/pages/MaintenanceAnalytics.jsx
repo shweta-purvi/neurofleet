@@ -149,14 +149,17 @@ const MaintenanceAnalytics = () => {
                             }
                         }} />
                     </div>
-                    <div style={{ marginTop: '32px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                            <Settings size={20} color="var(--primary)" />
-                            <p style={{ fontSize: '0.9rem' }}>Smart Sensor Sync <span style={{ color: 'var(--success)' }}>Active</span></p>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <Clock size={20} color="var(--secondary)" />
-                            <p style={{ fontSize: '0.9rem' }}>Next Batch Update: <span style={{ fontWeight: 600 }}>14m 22s</span></p>
+                    <div style={{ marginTop: '32px', padding: '16px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        <h4 style={{ fontSize: '0.8rem', color: 'var(--primary)', marginBottom: '12px' }}>NEURO-HEALTH CORRELATION</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '0.7rem' }}>
+                            <span style={{ color: 'var(--text-muted)' }}>• Road Type Impact</span>
+                            <span style={{ textAlign: 'right' }}>High Correlation</span>
+                            <span style={{ color: 'var(--text-muted)' }}>• Load Weight Stress</span>
+                            <span style={{ textAlign: 'right' }}>Active Sensor</span>
+                            <span style={{ color: 'var(--text-muted)' }}>• Driving Score Data</span>
+                            <span style={{ textAlign: 'right' }}>Predictive Sync</span>
+                            <span style={{ color: 'var(--text-muted)' }}>• Weather Degradation</span>
+                            <span style={{ textAlign: 'right' }}>Monitored</span>
                         </div>
                     </div>
                 </div>

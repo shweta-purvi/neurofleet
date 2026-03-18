@@ -146,7 +146,7 @@ const RealTimeTracking = () => {
                         <p style={{ fontSize: '0.75rem', marginTop: '8px', color: 'var(--text-muted)' }}>94% Uplink - Hub Delta</p>
                     </div>
 
-                    <div className="stat-card" style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column' }}>
+                    <div className="stat-card" style={{ flex: 1, padding: '20px', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
                         <h3 style={{ fontSize: '1rem', marginBottom: '20px' }}>Vehicle Registry</h3>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {vehicles.map(v => (
@@ -179,6 +179,44 @@ const RealTimeTracking = () => {
                             ))}
                         </div>
                     </div>
+
+                    {selectedVehicle && (
+                        <div className="stat-card" style={{ padding: '20px', background: 'linear-gradient(135deg, rgba(30, 41, 59, 1), rgba(0, 242, 254, 0.05))' }}>
+                            <h3 style={{ fontSize: '0.9rem', marginBottom: '16px', color: 'var(--primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Activity size={16} /> AI Telemetry Analysis
+                            </h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.7rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Traffic Density</span>
+                                    <span>{selectedVehicle.trafficDensity || 20}%</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Road Surface</span>
+                                    <span>{selectedVehicle.roadType || 'City'}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Weather AI</span>
+                                    <span>{selectedVehicle.currentWeather || 'Clear'}</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Load Weight</span>
+                                    <span>{selectedVehicle.loadWeight || 0}kg</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Driver Score</span>
+                                    <span style={{ color: 'var(--success)' }}>{selectedVehicle.driverPerformanceScore || 95}/100</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Idle Time</span>
+                                    <span>{selectedVehicle.idleTime || 0}m</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <span style={{ color: 'var(--text-muted)' }}>Passengers</span>
+                                    <span>{selectedVehicle.passengerCount || 0} px</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
