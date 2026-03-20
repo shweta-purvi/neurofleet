@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import {
     LayoutDashboard,
     Car,
@@ -71,7 +71,7 @@ const Sidebar = () => {
 
     return (
         <aside className="nav-sidebar">
-            <div className="logo-text" style={{ fontSize: '1.5rem', marginBottom: '40px', textAlign: 'left' }}>NeuroFleetX</div>
+            <Link to="/" className="logo-text" style={{ fontSize: '1.5rem', marginBottom: '40px', textAlign: 'left', textDecoration: 'none', display: 'block' }}>NeuroFleetX</Link>
 
             <div style={{ marginBottom: '32px' }}>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Main Menu</p>

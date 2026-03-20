@@ -26,7 +26,8 @@ const Register = () => {
             navigate(`/${formData.role.toLowerCase()}/dashboard`);
         } catch (err) {
             console.error(err);
-            alert('Registration failed. Email might already be in use.');
+            const errorMsg = err.response?.data?.message || err.response?.data || 'Registration failed. Please check your details.';
+            alert(errorMsg);
         } finally {
             setLoading(false);
         }

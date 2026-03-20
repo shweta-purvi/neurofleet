@@ -28,6 +28,7 @@ C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\reposit
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\controller\MessageController.java
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\model\MaintenanceRecord.java
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\controller\BookingController.java
+C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\exception\GlobalExceptionHandler.java
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\security\JwtService.java
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\security\WebConfig.java
 C:\Users\satis\Desktop\NeurofleetX\backend\src\main\java\com\neurofleetx\controller\VehicleController.java

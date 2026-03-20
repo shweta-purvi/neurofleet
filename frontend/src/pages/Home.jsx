@@ -8,16 +8,6 @@ const Home = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const savedUser = localStorage.getItem('neuro_user');
-        if (savedUser) {
-            const parsedUser = JSON.parse(savedUser);
-            if (parsedUser && parsedUser.role) {
-                const rolePath = parsedUser.role.toLowerCase();
-                navigate(`/${rolePath}/dashboard`);
-            }
-        }
-    }, [navigate]);
     return (
         <div className="landing-container">
             {/* Navbar */}
@@ -26,8 +16,14 @@ const Home = () => {
                 <div className="nav-links">
                     <a href="#features">Features</a>
                     <a href="#platform">Platform</a>
-                    <Link to="/login" className="btn-secondary">Log In</Link>
-                    <Link to="/register" className="btn-primary">Get Started</Link>
+                    {user ? (
+                        <Link to={`/${user.role.toLowerCase()}/dashboard`} className="btn-primary">Dashboard</Link>
+                    ) : (
+                        <>
+                            <Link to="/login" className="btn-secondary">Log In</Link>
+                            <Link to="/register" className="btn-primary">Get Started</Link>
+                        </>
+                    )}
                 </div>
             </nav>
 

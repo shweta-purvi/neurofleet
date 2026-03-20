@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Settings as SettingsIcon, Globe, Bell, Shield, Eye, Palette, Zap, Check, Lock, Smartphone, Monitor } from 'lucide-react';
 
 const Settings = () => {
     const [activeTab, setActiveTab] = useState('interface');
-    const [settings, setSettings] = useState({
-        predictiveOverlay: true,
-        autonomousTelemetry: true,
-        quantumEdge: false,
-        alerts: {
-            battery: true,
-            maintenance: true,
-            messages: true,
-            system: false
-        },
-        incognito: false,
-        shareTelemetry: true,
-        theme: 'Deep Space',
-        density: 'Comfortable'
+    const [settings, setSettings] = useState(() => {
+        const savedSettings = localStorage.getItem('neuro_settings');
+        return savedSettings ? JSON.parse(savedSettings) : {
+            predictiveOverlay: true,
+            autonomousTelemetry: true,
+            quantumEdge: false,
+            alerts: {
+                battery: true,
+                maintenance: true,
+                messages: true,
+                system: false
+            },
+            incognito: false,
+            shareTelemetry: true,
+            theme: 'Deep Space',
+            density: 'Comfortable'
+        };
     });
+
+    useEffect(() => {
+        localStorage.setItem('neuro_settings', JSON.stringify(settings));
+    }, [settings]);
 
     const toggleSetting = (key) => {
         setSettings(prev => ({ ...prev, [key]: !prev[key] }));

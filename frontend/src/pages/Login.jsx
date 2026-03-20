@@ -25,7 +25,8 @@ const Login = () => {
             navigate(`/${formData.role.toLowerCase()}/dashboard`);
         } catch (err) {
             console.error(err);
-            alert('Authentication failed. Please check your credentials.');
+            const errorMsg = err.response?.data?.message || err.response?.data || 'Authentication failed. Please check your credentials.';
+            alert(errorMsg);
         } finally {
             setLoading(false);
         }
